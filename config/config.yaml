@@ -1,0 +1,16 @@
+# 要分析的数据天数
+data_days: 20
+# 方法1和方法2的配置
+days_window: 10          # X：观察天数
+change_threshold: 20     # Y：变化百分比阈值 (20%)
+
+# 方法2特有的配置
+stable_pressure_threshold: 5    # 套压变化小于5%认为稳定
+
+# 方法3的配置
+zigzag_threshold: 20    # Y：锯齿波动幅度阈值 (20%)
+zigzag_window: 3        # 锯齿模式检查的天数
+
+# 方法4的配置
+pressure_diff_threshold: 3.0    # Z：压差阈值 (3.0 MPa)
+closed_hours: 48               # 关井时长要求 (48小时) 
