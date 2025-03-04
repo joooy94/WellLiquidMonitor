@@ -18,14 +18,16 @@ class Config:
         config_path: YAML配置文件路径，如果为None则使用默认值
         """
         # 默认配置
-        self.data_days = 20        # 要分析的数据天数
-        self.days_window = 10      # 积液判断的滑动窗口大小
+        self.data_days = 20            # 要分析的数据天数
+        self.days_window = 10          # 积液判断的滑动窗口大小
         self.change_threshold = 20
         self.stable_pressure_threshold = 5
         self.zigzag_threshold = 20
         self.zigzag_window = 3
         self.pressure_diff_threshold = 3.0
         self.closed_hours = 48
+        self.output_dir = 'data/output'  # 添加输出目录配置
+        self.generate_plot = False  # 默认不生成图表
         
         # 如果提供了配置文件路径，则加载配置
         if config_path:

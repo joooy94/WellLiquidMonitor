@@ -13,4 +13,8 @@ zigzag_window: 3        # 锯齿模式检查的天数
 
 # 方法4的配置
 pressure_diff_threshold: 3.0    # Z：压差阈值 (3.0 MPa)
-closed_hours: 48               # 关井时长要求 (48小时) 
+closed_hours: 48               # 关井时长要求 (48小时)
+
+# 输出配置
+output_dir: "data/output"      # 图表输出目录
+generate_plot: false           # 是否生成分析图表 

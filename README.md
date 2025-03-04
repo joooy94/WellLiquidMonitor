@@ -54,7 +54,7 @@ def main():
 2. `docker/Dockerfile`:
 ```dockerfile
 # 暴露端口
-EXPOSE 8001  # 修改此处
+EXPOSE 7999  # 修改此处
 ```
 
 3. `docker/docker-compose.yml`:
@@ -121,7 +121,9 @@ http://localhost:7999/docs
         "zigzag_threshold": 20,
         "zigzag_window": 3,
         "pressure_diff_threshold": 3.0,
-        "closed_hours": 48
+        "closed_hours": 48,
+        "generate_plot": true,
+        "output_dir": "data/output"
     }
 }
 ```
@@ -144,53 +146,69 @@ http://localhost:7999/docs
   - `zigzag_window`: 锯齿检查天数
   - `pressure_diff_threshold`: 压差阈值 (MPa)
   - `closed_hours`: 关井时长要求 (小时)
+  - `generate_plot`: 是否生成分析图表 (默认: false)
+  - `output_dir`: 图表输出目录 (默认: "data/output")
+
+#### 分析图表示例
+当 `generate_plot=true` 时，会在 `output_dir` 指定的目录下生成分析图表：
+
+![分析图表示例](data/output/feature_analysis.png)
+
+图表包含四个子图：
+1. 套压随时间变化（红色和绿色区域分别表示方法1和方法2检测到的积液时段）
+2. 日产气量随时间变化
+3. 油套压差随时间变化（红色区域表示方法4检测到的积液时段）
+4. 开关井状态随时间变化
 
 #### 响应示例
 ```json
 {
-    "status": "success",
-    "data_info": {
-        "start_time": "2024-10-10 00:00:00",
-        "end_time": "2024-10-30 00:00:00",
-        "config": {
-            "data_days": 20,
-            "days_window": 3,
-            "change_threshold": 10,
-            "stable_pressure_threshold": 5,
-            "zigzag_threshold": 20,
-            "zigzag_window": 3,
-            "pressure_diff_threshold": 3,
-            "closed_hours": 48
-        },
-        "data_points": 481
-    },
-    "analysis_results": {
-        "method1": {
-            "result": true,
-            "periods": [
-                {
-                    "start_date": "2024-10-20",
-                    "end_date": "2024-10-22",
-                    "pressure_change": "17.4%",
-                    "flow_change": "-18.4%"
-                }
-            ]
-        },
-        "method2": {
-            "result": false,
-            "periods": []
-        },
-        "method3": {
-            "result": false,
-            "periods": []
-        },
-        "method4": {
-            "result": false,
-            "periods": []
-        },
-        "stage": "泡沫助排阶段"
-    },
-    "treatment_stage": "泡沫助排阶段"
+	"status": "success",
+	"data_info": {
+		"start_time": "2024-10-10 00:00:00",
+		"end_time": "2024-10-30 00:00:00",
+		"config": {
+			"data_days": 20,
+			"days_window": 10,
+			"change_threshold": 20,
+			"stable_pressure_threshold": 5,
+			"zigzag_threshold": 20,
+			"zigzag_window": 3,
+			"pressure_diff_threshold": 3,
+			"closed_hours": 48,
+			"generate_plot": true,
+			"output_dir": "data/output"
+		},
+		"data_points": 481,
+		"plot_generated": true
+	},
+	"analysis_results": {
+		"method1": {
+			"result": true,
+			"periods": [
+				{
+					"start_date": "2024-10-20",
+					"end_date": "2024-10-29",
+					"pressure_change": "46.3%",
+					"flow_change": "-25.4%"
+				}
+			]
+		},
+		"method2": {
+			"result": false,
+			"periods": []
+		},
+		"method3": {
+			"result": false,
+			"periods": []
+		},
+		"method4": {
+			"result": false,
+			"periods": []
+		},
+		"stage": "泡沫助排阶段"
+	},
+	"treatment_stage": "泡沫助排阶段"
 }
 ```
 
@@ -200,7 +218,18 @@ http://localhost:7999/docs
   - `start_time`: 数据开始时间
   - `end_time`: 数据结束时间
   - `config`: 使用的配置参数
+    - `data_days`: 要分析的数据天数
+    - `days_window`: 观察天数
+    - `change_threshold`: 变化百分比阈值
+    - `stable_pressure_threshold`: 套压稳定阈值
+    - `zigzag_threshold`: 锯齿波动幅度阈值
+    - `zigzag_window`: 锯齿检查天数
+    - `pressure_diff_threshold`: 压差阈值
+    - `closed_hours`: 关井时长要求
+    - `generate_plot`: 是否生成分析图表
+    - `output_dir`: 图表输出目录
   - `data_points`: 数据点数量
+  - `plot_generated`: 是否已生成分析图表
 - `analysis_results`: 分析结果
   - `method1~4`: 各种判断方法的结果
     - `result`: 是否检测到积液

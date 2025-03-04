@@ -30,14 +30,16 @@ class TableData(BaseModel):
 
 # 定义配置模型
 class ConfigParams(BaseModel):
-    data_days: Optional[int] = 20       # 要分析的数据天数
-    days_window: Optional[int] = 10     # 积液判断的滑动窗口大小
+    data_days: Optional[int] = 20
+    days_window: Optional[int] = 10
     change_threshold: Optional[float] = 20
     stable_pressure_threshold: Optional[float] = 5
     zigzag_threshold: Optional[float] = 20
     zigzag_window: Optional[int] = 3
     pressure_diff_threshold: Optional[float] = 3.0
     closed_hours: Optional[int] = 48
+    generate_plot: Optional[bool] = False  # 默认不生成图表
+    output_dir: Optional[str] = 'data/output'
 
 # 定义请求模型
 class AnalysisRequest(BaseModel):
@@ -116,8 +118,14 @@ async def analyze_well(request: AnalysisRequest):
         detector = LiquidLoadingDetector(config)
         results, daily_gas_production = detector.analyze(df_resampled)
         
-        # 生成图表
-        # plot_features(df_resampled, daily_gas_production, results)
+        # 生成图表（如果需要）
+        if request.config_params and request.config_params.generate_plot:
+            plot_features(
+                df_resampled, 
+                daily_gas_production, 
+                results,
+                output_dir=config.output_dir  # 使用配置中的输出目录
+            )
         
         # 返回结果
         return {
@@ -126,7 +134,8 @@ async def analyze_well(request: AnalysisRequest):
                 "start_time": df_resampled.index.min().strftime('%Y-%m-%d %H:%M:%S'),
                 "end_time": df_resampled.index.max().strftime('%Y-%m-%d %H:%M:%S'),
                 "config": config_params.model_dump(),
-                "data_points": len(df_resampled)
+                "data_points": len(df_resampled),
+                "plot_generated": request.config_params.generate_plot if request.config_params else False
             },
             "analysis_results": results,
             "treatment_stage": results.get('stage', '未知')
