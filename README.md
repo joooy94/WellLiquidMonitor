@@ -105,23 +105,23 @@ http://localhost:7999/docs
 ```json
 {
     "data_source": {
-        "time": ["2024-10-29 00:00:00", "2024-10-29 01:00:00", ...],
-        "oil_pressure": [1.431, 1.425, ...],
-        "casing_pressure": [2.129, 2.128, ...],
-        "tubing_pressure": [1.444, 1.439, ...],
-        "gas_flow_rate": [218.986, 223.815, ...],
-        "total_gas_flow": [3390283, 3390508, ...],
-        "switch_status": [0, 0, ...]
+        "time": ["2024-10-29 00:00:00", "2024-10-29 01:00:00", ...],  // 时间序列
+        "oil_pressure": [1.431, 1.425, ...],                           // 油压 (MPa)
+        "casing_pressure": [2.129, 2.128, ...],                        // 套压 (MPa)
+        "tubing_pressure": [1.444, 1.439, ...],                        // 油管压力 (MPa)
+        "gas_flow_rate": [218.986, 223.815, ...],                      // 气体流量 (m³/h)
+        "total_gas_flow": [3390283, 3390508, ...],                     // 累计产气量 (m³)
+        "switch_status": [0, 0, ...]                                   // 开关井状态 (0-开井,1-关井)
     },
     "config_params": {
-        "data_days": 20,          // 要分析的数据天数
-        "days_window": 3,         // 观察天数
-        "change_threshold": 10,    // 变化百分比阈值
-        "stable_pressure_threshold": 5,  // 套压稳定阈值
-        "zigzag_threshold": 20,    // 锯齿波动幅度阈值
-        "zigzag_window": 3,        // 锯齿检查天数
-        "pressure_diff_threshold": 3.0,  // 压差阈值
-        "closed_hours": 48         // 关井时长要求
+        "data_days": 20,                    // 要分析的数据天数
+        "days_window": 3,                   // 观察天数
+        "change_threshold": 10,             // 变化百分比阈值
+        "stable_pressure_threshold": 5,     // 套压稳定阈值
+        "zigzag_threshold": 20,            // 锯齿波动幅度阈值
+        "zigzag_window": 3,                // 锯齿检查天数
+        "pressure_diff_threshold": 3.0,     // 压差阈值 (MPa)
+        "closed_hours": 48                 // 关井时长要求 (小时)
     }
 }
 ```
