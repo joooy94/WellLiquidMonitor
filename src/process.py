@@ -202,7 +202,7 @@ class LiquidLoadingDetector:
         
         # 根据积液发生时的产量判断阶段
         if production_10k >= 1.0:
-            self.results['stage'] = '支柱携带阶段'
+            self.results['stage'] = '自主携液阶段'
         elif 0.8 <= production_10k < 1.0:
             self.results['stage'] = '过渡阶段'
         elif 0.5 <= production_10k < 0.8:
